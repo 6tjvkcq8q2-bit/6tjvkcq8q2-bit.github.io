@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>追风的人 · 个人博客</title>
+<style>
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(-45deg,#4158D0,#C850C0,#6dd5ed,#2193b0);
+    background-size: 400% 400%;
+    animation: bgFlow 15s ease infinite;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+}
+@keyframes bgFlow{
+    0%{background-position: 0% 50%;}
+    50%{background-position: 100% 50%;}
+    100%{background-position: 0% 50%;}
+}
+
+/* 圆形头像样式，已适配你的图片 */
+.avatar-ring{
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    border: 4px solid #ffffff;
+    object-fit: cover;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+
+/* 毛玻璃标题卡片 */
+.title-card {
+    text-align: center;
+    padding: 30px 50px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+.blog-title{
+    font-size: 40px;
+    letter-spacing: 8px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    text-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.blog-subtitle{
+    font-size: 17px;
+    opacity: 0.9;
+    letter-spacing: 3px;
+    font-weight: 300;
+}
+
+/* 页面淡入动画 */
+html {
+    animation: fadeIn 1.2s ease;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+
+<!-- 已嵌入你的头像图片，直接可用 -->
+<img class="avatar-ring" src="https://p3-flow-image-sign.byteimg.com/tos-cn-i-a9r32ns6o0/08111809289911243.jpeg~tplv-a9r32ns6o0-image.image" alt="头像">
+
+<div class="title-card">
+    <div class="blog-title">追风的人</div>
+    <div class="blog-subtitle">个人博客 · 时光自留地</div>
+</div>
+
+</body>
+</html>
