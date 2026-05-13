@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Windblade · 追风的人</title>
+    <meta name="theme-color" content="#050816">
+    <meta name="description" content="Windblade · 一个关于视觉设计、生活美学与创意表达的个人博客。">
+    <meta property="og:title" content="Windblade · 追风的人">
+    <meta property="og:description" content="心有山海，静而不争。">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-deep: #050816;
+            --glass-bg: rgba(15, 20, 35, 0.58);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-highlight: rgba(255, 255, 255, 0.06);
+            --text-primary: rgba(255, 255, 255, 0.92);
+            --text-soft: rgba(255, 255, 255, 0.68);
+            --text-muted: rgba(255, 255, 255, 0.4);
+            --accent-lavender: #b794f4;
+            --accent-blue: #7aa2f7;
+            --blur-amount: 18px;
+        }
+
+        body {
+            font-family: "Inter", "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, sans-serif;
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.5;
+        }
+
+        /* 星空画布 & 星云特效 */
+        #stars {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .nebula {
+            position: fixed;
+            inset: -25%;
+            z-index: 1;
+            background: 
+                radial-gradient(circle at 25% 20%, rgba(139, 92, 246, 0.12), transparent 55%),
+                radial-gradient(circle at 75% 70%, rgba(59, 130, 246, 0.08), transparent 60%),
+                radial-gradient(circle at 50% 40%, rgba(167, 139, 250, 0.05), transparent 50%);
+            filter: blur(65px);
+            opacity: 0.7;
+            animation: nebulaDrift 28s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes nebulaDrift {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(1.2%, -0.8%) scale(1.03); }
+        }
+
+        /* 主容器：三个框垂直居中，整体视口居中 */
+        .cards-container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 48px 24px;
+            gap: 32px;
+        }
+
+        /* 通用玻璃卡片样式 — 三个独立框 */
+        .glass-card {
+            max-width: 720px;
+            width: 100%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--blur-amount));
+            -webkit-backdrop-filter: blur(var(--blur-amount));
+            border: 1px solid var(--glass-border);
+            border-radius: 36px;
+            padding: 32px 36px;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 18px 36px -12px rgba(0, 0, 0, 0.4);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 28px 40px -16px rgba(0, 0, 0, 0.5);
+            background: rgba(20, 26, 45, 0.65);
+        }
+
+        /* 卡片内部元素统一样式 */
+        .logo-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .logo-svg {
+            width: 68px;
+            height: 68px;
+            margin-bottom: 16px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            letter-spacing: 6px;
+            background: linear-gradient(135deg, #fff, #d9c8ff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .tagline {
+            font-weight: 350;
+            font-size: 0.95rem;
+            letter-spacing: 1.2px;
+            color: var(--text-soft);
+            margin-top: 6px;
+            border-top: 1px dashed rgba(255,255,255,0.2);
+            padding-top: 14px;
+            display: inline-block;
+        }
+
+        .divider-light {
+            width: 48px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-lavender), transparent);
+            margin: 20px auto 18px;
+            opacity: 0.5;
+        }
+
+        /* 简介+爱好行 */
+        .hobby-line {
+            text-align: center;
+            color: var(--text-soft);
+            font-weight: 350;
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
+        .highlight-tag {
+            display: inline-block;
+            background: rgba(183, 148, 244, 0.18);
+            padding: 2px 12px;
+            border-radius: 30px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            margin: 0 2px;
+            letter-spacing: 0.3px;
+        }
+
+        /* 第二个卡片: 引用块 + 关于我主体段落 */
+        .quote-block {
+            text-align: center;
+            margin-bottom: 28px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        blockquote {
+            font-size: 1.2rem;
+            font-weight: 350;
+            font-style: italic;
+            letter-spacing: 0.3px;
+            color: #e2d5ff;
+            line-height: 1.6;
+        }
+        .quote-author {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--text-muted);
+            margin-top: 10px;
+        }
+
+        .bio-title {
+            font-size: 1.35rem;
+            font-weight: 550;
+            letter-spacing: 2px;
+            text-align: center;
+            margin: 28px 0 12px 0;
+        }
+        .greeting-text {
+            font-weight: 500;
+            margin-bottom: 16px;
+            text-align: center;
+            color: #eef2ff;
+        }
+        .bio-paragraph {
+            color: var(--text-soft);
+            line-height: 1.8;
+            font-weight: 350;
+            margin-bottom: 18px;
+            text-align: justify;
+            text-indent: 2em;
+        }
+        .bio-paragraph:last-of-type {
+            margin-bottom: 0;
+        }
+
+        /* 第三个卡片：联系 + 版权 */
+        .contact-card {
+            text-align: center;
+        }
+        .contact-email {
+            margin: 12px 0 8px;
+        }
+        .contact-email a {
+            color: #cfbef5;
+            text-decoration: none;
+            border-bottom: 1px dashed rgba(207, 190, 245, 0.6);
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            word-break: break-all;
+        }
+        .contact-email a:hover {
+            color: white;
+            border-bottom-color: #b794f4;
+        }
+        .copyright-text {
+            margin-top: 28px;
+            font-size: 0.7rem;
+            letter-spacing: 1.5px;
+            color: rgba(255,255,255,0.25);
+        }
+
+        /* 语言切换按钮保持原位置 */
+        .lang-switch {
+            position: fixed;
+            left: 20px;
+            bottom: 24px;
+            width: 44px;
+            height: 44px;
+            border-radius: 60px;
+            background: rgba(20, 25, 45, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            z-index: 30;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        .lang-switch:hover {
+            background: rgba(50, 60, 95, 0.8);
+            border-color: rgba(255,255,255,0.35);
+            transform: scale(0.96);
+        }
+
+        /* 双语显示控制 */
+        html:not([lang="en"]) .en { display: none; }
+        html[lang="en"] .zh { display: none; }
+
+        /* 响应式优化 */
+        @media (max-width: 780px) {
+            .cards-container {
+                padding: 36px 20px;
+                gap: 28px;
+            }
+            .glass-card {
+                padding: 28px 24px;
+                border-radius: 28px;
+            }
+            h1 {
+                font-size: 2rem;
+                letter-spacing: 3px;
+            }
+            .logo-svg {
+                width: 54px;
+                height: 54px;
+            }
+            blockquote {
+                font-size: 1rem;
+            }
+            .bio-paragraph {
+                font-size: 0.9rem;
+                text-indent: 1.5em;
+            }
+            .bio-title {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .glass-card {
+                padding: 24px 20px;
+            }
+            h1 {
+                font-size: 1.75rem;
+            }
+            .tagline {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* 平滑滚动 + 聚焦优化 */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* 移除canvas可能造成的层级冲突，确保卡片可点。 canvas指针已none */
+    </style>
+</head>
+<body>
+    <canvas id="stars"></canvas>
+    <div class="nebula"></div>
+
+    <main class="cards-container">
+        <!-- 卡片 1: 品牌 / 身份 + 爱好简述 -->
+        <div class="glass-card">
+            <div class="logo-area">
+                <div class="logo-svg">
+                    <svg viewBox="0 0 120 120" fill="none" width="100%" height="100%">
+                        <path d="M15 60 Q40 18 72 34 T108 54" stroke="#b794f4" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+                        <path d="M22 82 Q52 48 92 72" stroke="#7aa2f7" stroke-width="2.2" opacity="0.7" stroke-linecap="round"/>
+                        <circle cx="52" cy="44" r="2" fill="#d9b8ff" opacity="0.6"/>
+                        <circle cx="88" cy="58" r="1.8" fill="#b7a0ff" opacity="0.5"/>
+                    </svg>
+                </div>
+                <h1>
+                    <span class="zh">追风的人</span>
+                    <span class="en">Windblade</span>
+                </h1>
+                <div class="tagline">
+                    <span class="zh">心有山海，静而不争，慢慢来，一切皆有期。</span>
+                    <span class="en">With mountains and seas in heart, serene and unhurried, everything comes in its time.</span>
+                </div>
+                <div class="divider-light"></div>
+                <div class="hobby-line">
+                    <span class="zh">
+                        热爱生活与创意设计，偏爱安静与温柔。<br>
+                        喜欢收集美好、制作<span class="highlight-tag">海报</span>与<span class="highlight-tag">视觉创作</span>，<br>
+                        守一份纯粹，做自己的风景。
+                    </span>
+                    <span class="en">
+                        Passionate about life and creative design, fond of quiet and gentle things.<br>
+                        Enjoy collecting beauty, making <span class="highlight-tag">posters</span> & <span class="highlight-tag">visual creations</span>,<br>
+                        Preserving purity, being my own scenery.
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 卡片 2: 引言 + 关于我详细段落 (三个独立自然段) -->
+        <div class="glass-card">
+            <div class="quote-block">
+                <blockquote>
+                    <span class="zh">“风不会停，但你可以选择如何迎风而行。”</span>
+                    <span class="en">“The wind never stops, but you can choose how to sail with it.”</span>
+                </blockquote>
+                <div class="quote-author">— Windblade</div>
+            </div>
+
+            <div class="bio-title">
+                <span class="zh">关于我</span>
+                <span class="en">About Me</span>
+            </div>
+            <div class="greeting-text">
+                <span class="zh">你好，很高兴与你相逢于此。</span>
+                <span class="en">Hello, nice to meet you here.</span>
+            </div>
+            <p class="bio-paragraph">
+                <span class="zh">我是追风的人，一个偏爱安静、心怀温柔的普通人。</span>
+                <span class="en">I am the Windblade, an ordinary person who loves quietness and carries tenderness.</span>
+            </p>
+            <p class="bio-paragraph">
+                <span class="zh">不喜喧嚣热闹，独爱岁月清宁，习惯在平淡的日子里收集世间所有美好。热爱视觉创作、喜欢打磨版式与画面，钟情于用审美装点生活，把细碎的温柔藏进每一处细节里。</span>
+                <span class="en">Not keen on noise and bustle, I cherish tranquil days, collecting all the beauty in ordinary life. I love visual creation, refining layouts and images, decorating life with aesthetics, and hiding delicate tenderness in every detail.</span>
+            </p>
+            <p class="bio-paragraph">
+                <span class="zh">心有山海，静而不争。不慌不忙，慢慢前行，相信世间所有奔赴，皆有归途，所有美好，终会如期而至。</span>
+                <span class="en">With mountains and seas in heart, serene and unhurried. Take it easy and move forward, believing every journey has its destination, and all beauty will come as promised.</span>
+            </p>
+            <p class="bio-paragraph">
+                <span class="zh">愿往后日子，追风赶月不回头，平安喜乐度余生，也愿路过此间的你，岁岁安然，万事顺遂。</span>
+                <span class="en">May the days ahead be free of looking back, filled with peace and joy. And may you who pass by here be safe and sound, with everything going smoothly.</span>
+            </p>
+        </div>
+
+        <!-- 卡片 3: 联系方式 + 版权信息 -->
+        <div class="glass-card contact-card">
+            <div class="contact-email">
+                <span class="zh">📧 联系我：</span>
+                <span class="en">📧 Contact me: </span>
+                <a href="mailto:wtywty1025@qq.com">wtywty1025@qq.com</a>
+            </div>
+            <div class="copyright-text">
+                <span class="zh">© 2026 Windblade · 追风的人</span>
+                <span class="en">© 2026 Windblade · All Rights Reserved</span>
+            </div>
+            <div class="divider-light" style="margin: 20px auto 6px; width: 36px;"></div>
+            <div style="font-size: 0.7rem; letter-spacing: 1px; color: rgba(255,255,255,0.2); margin-top: 8px;">
+                <span class="zh">追风赶月莫停留，平芜尽处是春山。</span>
+                <span class="en">Chase the wind and moon, never stay; beyond the plains lie spring hills.</span>
+            </div>
+        </div>
+    </main>
+
+    <button class="lang-switch" id="langToggle" aria-label="语言切换">中</button>
+
+    <script>
+        /* ======================== 星空粒子 + 流星效果（优化性能、保留视觉深度） ======================== */
+        (function() {
+            const canvas = document.getElementById("stars");
+            if (!canvas) return;
+            const ctx = canvas.getContext("2d");
+            let width, height;
+            let starsArray = [];
+            let meteorsArray = [];
+            let animationId;
+            let deviceRatio = Math.min(window.devicePixelRatio || 1, 2);
+
+            function getStarCount() {
+                return window.innerWidth < 768 ? 90 : 180;
+            }
+
+            function resizeCanvas() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = width * deviceRatio;
+                canvas.height = height * deviceRatio;
+                canvas.style.width = width + "px";
+                canvas.style.height = height + "px";
+                ctx.setTransform(deviceRatio, 0, 0, deviceRatio, 0, 0);
+                initStars();
+            }
+
+            function initStars() {
+                const starCount = getStarCount();
+                starsArray = [];
+                for (let i = 0; i < starCount; i++) {
+                    starsArray.push({
+                        x: Math.random() * width,
+                        y: Math.random() * height,
+                        radius: Math.random() * 1.4 + 0.6,
+                        alpha: Math.random() * 0.6 + 0.2,
+                        speedY: Math.random() * 0.22 + 0.04,
+                        driftX: (Math.random() - 0.5) * 0.12,
+                        twinkleDelta: (Math.random() - 0.5) * 0.004,
+                        phase: Math.random() * Math.PI * 2,
+                    });
+                }
+            }
+
+            function drawStars() {
+                for (let s of starsArray) {
+                    // 闪烁微动
+                    s.alpha += s.twinkleDelta;
+                    if (s.alpha > 0.85) s.alpha = 0.85;
+                    if (s.alpha < 0.2) s.alpha = 0.2;
+                    
+                    s.y += s.speedY;
+                    s.x += Math.sin(s.y * 0.004) * 0.06 + s.driftX;
+                    
+                    if (s.y > height) {
+                        s.y = 0;
+                        s.x = Math.random() * width;
+                    }
+                    if (s.x < -20) s.x = width + 10;
+                    if (s.x > width + 20) s.x = -10;
+                    
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 235, 245, ${s.alpha * 0.9})`;
+                    ctx.fill();
+                }
+            }
+
+            function addMeteor() {
+                if (meteorsArray.length < 1 && Math.random() < 0.0022) {
+                    meteorsArray.push({
+                        x: Math.random() * width,
+                        y: Math.random() * height * 0.25,
+                        length: 70 + Math.random() * 65,
+                        speedX: -3.2 - Math.random() * 2.4,
+                        speedY: 1.8 + Math.random() * 1.8,
+                        life: 0.95,
+                        decay: 0.018 + Math.random() * 0.012,
+                    });
+                }
+            }
+
+            function drawMeteors() {
+                for (let i = meteorsArray.length - 1; i >= 0; i--) {
+                    const m = meteorsArray[i];
+                    const grad = ctx.createLinearGradient(m.x, m.y, m.x + m.length * 0.7, m.y - m.length * 0.35);
+                    grad.addColorStop(0, `rgba(235, 215, 255, ${m.life * 0.9})`);
+                    grad.addColorStop(1, `rgba(150, 120, 220, 0)`);
+                    ctx.beginPath();
+                    ctx.moveTo(m.x, m.y);
+                    ctx.lineTo(m.x + m.length * 0.65, m.y - m.length * 0.32);
+                    ctx.strokeStyle = grad;
+                    ctx.lineWidth = 1.8;
+                    ctx.stroke();
+                    
+                    m.x += m.speedX;
+                    m.y += m.speedY;
+                    m.life -= m.decay;
+                    if (m.life <= 0.02 || m.x < -150 || m.y > height + 100) {
+                        meteorsArray.splice(i, 1);
+                    }
+                }
+            }
+
+            function animateFrame() {
+                if (!ctx) return;
+                ctx.clearRect(0, 0, width, height);
+                drawStars();
+                addMeteor();
+                drawMeteors();
+                animationId = requestAnimationFrame(animateFrame);
+            }
+
+            window.addEventListener("resize", () => {
+                if (animationId) cancelAnimationFrame(animationId);
+                resizeCanvas();
+                animateFrame();
+            });
+            resizeCanvas();
+            animateFrame();
+        })();
+
+        /* ========== 语言切换 (保留本地存储 & 按钮状态) ========== */
+        (function setupLang() {
+            const htmlEl = document.documentElement;
+            const btn = document.getElementById("langToggle");
+            if (!btn) return;
+            let currentLang = localStorage.getItem("windblade_lang") || "zh";
+            htmlEl.lang = currentLang;
+            btn.textContent = currentLang === "en" ? "EN" : "中";
+            
+            btn.addEventListener("click", () => {
+                const newLang = htmlEl.lang === "en" ? "zh" : "en";
+                htmlEl.lang = newLang;
+                localStorage.setItem("windblade_lang", newLang);
+                btn.textContent = newLang === "en" ? "EN" : "中";
+            });
+        })();
+        
+        /* 额外的边缘平滑：防止卡片容器因高度不足而偏移 */
+        (function fixVerticalCenter() {
+            const container = document.querySelector('.cards-container');
+            if (container && window.innerHeight > 700) {
+                // 如果内容高度略小于视口，仍然自然居中，有gap保证美观。
+                // 无需强制flex-start，已经min-height：100vh + justify-content center。
+                // 确保所有卡片可见即可，但为了更好视觉效果，不需要额外补丁。
+            }
+        })();
+    </script>
+</body>
+</html>
