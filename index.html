@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>追风的人 · The Wind Chaser</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data:;">
+    <style>
+        :root {
+            --text-glow: 0 4px 18px rgba(0, 0, 0, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        body {
+            background: linear-gradient(-45deg, #4158D0, #C850C0, #6dd5ed, #2193b0, #ff9a9e, #fad0c4, #fad0c4, #ffd1ff);
+            background-size: 400% 400%;
+            animation: bgFlow 18s ease infinite;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        @keyframes bgFlow {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 100% 0%; }
+            50% { background-position: 100% 50%; }
+            75% { background-position: 0% 100%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        body::before,
+        body::after {
+            content: '';
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(80px);
+            opacity: 0.25;
+            animation: floatOrb 18s ease-in-out infinite;
+        }
+
+        body::before {
+            width: 320px;
+            height: 320px;
+            background: rgba(255, 255, 255, 0.3);
+            top: -8%;
+            left: -6%;
+            animation-delay: 0s;
+        }
+
+        body::after {
+            width: 260px;
+            height: 260px;
+            background: rgba(255, 220, 240, 0.35);
+            bottom: -10%;
+            right: -5%;
+            animation-delay: -9s;
+        }
+
+        @keyframes floatOrb {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            20% { transform: translate(30px, -40px) scale(1.1); }
+            40% { transform: translate(-20px, 25px) scale(0.9); }
+            60% { transform: translate(15px, 35px) scale(1.05); }
+            80% { transform: translate(-25px, -20px) scale(0.95); }
+        }
+
+        .protected-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 620px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .card {
+            text-align: center;
+            width: 100%;
+            padding: 50px 40px 44px;
+            border-radius: 28px;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.18), 0 2px 8px rgba(255, 255, 255, 0.08) inset;
+            transition: box-shadow 0.5s ease, transform 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 14px 52px rgba(0, 0, 0, 0.24), 0 2px 10px rgba(255, 255, 255, 0.12) inset;
+            transform: translateY(-2px);
+        }
+
+        .avatar {
+            width: 88px;
+            height: 88px;
+            border-radius: 50%;
+            margin: 0 auto 22px;
+            background: linear-gradient(135deg, #f9d4e7, #c3d9ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            box-shadow: 0 6px 22px rgba(0, 0, 0, 0.16), 0 0 0 4px rgba(255, 255, 255, 0.25);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .card:hover .avatar {
+            transform: scale(1.06) rotate(2deg);
+        }
+
+        .avatar span {
+            display: inline-block;
+            transform: translateY(2px);
+        }
+
+        .name {
+            font-size: 42px;
+            letter-spacing: 11px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: var(--text-glow);
+            word-break: keep-all;
+            transition: letter-spacing 0.4s ease;
+        }
+
+        .card:hover .name {
+            letter-spacing: 14px;
+        }
+
+        .sign {
+            font-size: 17px;
+            letter-spacing: 2px;
+            opacity: 0.9;
+            margin-bottom: 36px;
+            line-height: 1.7;
+            font-weight: 300;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .divider {
+            width: 50px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.55);
+            border-radius: 2px;
+            margin: 0 auto 34px;
+            transition: width 0.5s ease;
+        }
+
+        .card:hover .divider {
+            width: 80px;
+        }
+
+        .info {
+            font-size: 15px;
+            line-height: 2.4;
+            opacity: 0.88;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+        }
+
+        .info .highlight {
+            display: inline-block;
+            padding: 2px 8px;
+            margin: 0 2px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.14);
+            font-weight: 500;
+            letter-spacing: 1px;
+            transition: background 0.3s ease;
+        }
+
+        .bio-card {
+            width: 100%;
+            padding: 40px 38px;
+            border-radius: 28px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+            font-weight: 300;
+            line-height: 2.2;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+            transition: box-shadow 0.5s ease, transform 0.3s ease;
+        }
+
+        .bio-card:hover {
+            box-shadow: 0 14px 52px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .bio-card h2 {
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            margin-bottom: 24px;
+            text-align: center;
+            opacity: 0.9;
+        }
+
+        .bio-card p {
+            margin-bottom: 18px;
+            font-size: 15px;
+            letter-spacing: 0.6px;
+            opacity: 0.85;
+        }
+
+        .bio-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        .bio-card .greeting {
+            font-size: 16px;
+            font-weight: 500;
+            opacity: 0.95;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .contact-line {
+            margin-top: 10px;
+            font-size: 13px;
+            opacity: 0.75;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        .contact-line a {
+            color: #fff;
+            text-decoration: none;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.5);
+            padding-bottom: 2px;
+            transition: opacity 0.2s;
+        }
+
+        .contact-line a:hover {
+            opacity: 0.8;
+        }
+
+        .copyright {
+            font-size: 12px;
+            opacity: 0.5;
+            letter-spacing: 1px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* 双语控制 */
+        html:not([lang="en"]) .en {
+            display: none;
+        }
+
+        html[lang="en"] .zh {
+            display: none;
+        }
+
+        html[lang="en"] .en {
+            display: inline;
+        }
+
+        /* 语言切换按钮 */
+        .lang-switch-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 9999;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: #fff;
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .lang-switch-btn:hover {
+            transform: scale(1.12);
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .lang-switch-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* 安全弹窗 */
+        .security-alert-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: alertFadeIn 0.2s ease-out;
+        }
+
+        .security-alert-box {
+            background: linear-gradient(135deg, #d32f2f, #b71c1c);
+            padding: 30px 40px;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 4px rgba(255, 255, 255, 0.2);
+            text-align: center;
+            animation: alertPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            color: white;
+            font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+        }
+
+        .security-alert-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .security-alert-text {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+
+        .security-alert-sub {
+            font-size: 14px;
+            opacity: 0.9;
+            letter-spacing: 1px;
+        }
+
+        .bruteforce-alert-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(180, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 100000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: alertFadeIn 0.2s ease-out;
+        }
+
+        .bruteforce-alert-box {
+            background: #000;
+            border: 3px solid #ff0000;
+            padding: 40px 50px;
+            border-radius: 20px;
+            box-shadow: 0 0 80px rgba(255, 0, 0, 0.6);
+            text-align: center;
+            color: #ff4444;
+            font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+            animation: alertPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .bruteforce-alert-icon {
+            font-size: 60px;
+            margin-bottom: 16px;
+        }
+
+        .bruteforce-alert-text {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 6px;
+            margin-bottom: 14px;
+            text-shadow: 0 0 20px red;
+        }
+
+        .bruteforce-alert-sub {
+            font-size: 16px;
+            color: #ff8888;
+            letter-spacing: 2px;
+        }
+
+        @keyframes alertFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes alertPop {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* 飘浮小球 */
+        .floating-balls {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .ball {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(14px);
+            opacity: 0.45;
+            will-change: transform;
+            animation: floatAnim ease-in-out infinite alternate;
+        }
+
+        @keyframes floatAnim {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(60px, -40px) scale(1.08); }
+        }
+
+        @keyframes floatAnim2 {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-50px, 50px) scale(0.92); }
+        }
+
+        /* ----- 开屏动画 (文字掉落+反弹) ----- */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(-45deg, #4158D0, #C850C0, #6dd5ed, #2193b0);
+            background-size: 400% 400%;
+            animation: bgFlow 18s ease infinite, splashFadeIn 0.5s ease-out;
+            z-index: 100001;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+            color: white;
+            transition: opacity 1s ease;
+        }
+
+        .splash-screen.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .splash-title {
+            font-size: 64px;
+            letter-spacing: 16px;
+            font-weight: 700;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 60px rgba(255, 255, 255, 0.4);
+            margin-bottom: 24px;
+            animation: dropIn 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s both;
+        }
+
+        .splash-sub {
+            font-size: 22px;
+            letter-spacing: 8px;
+            opacity: 0.85;
+            font-weight: 300;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            animation: dropIn 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s both;
+        }
+
+        .splash-divider {
+            width: 60px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.6);
+            margin: 18px auto 0;
+            border-radius: 2px;
+            animation: dropIn 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s both;
+            opacity: 0.7;
+        }
+
+        @keyframes splashFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes dropIn {
+            0% { transform: translateY(-120px); opacity: 0; }
+            60% { transform: translateY(15px); opacity: 1; }
+            75% { transform: translateY(-8px); }
+            90% { transform: translateY(4px); }
+            100% { transform: translateY(0); }
+        }
+
+        /* 响应式 */
+        @media (max-width: 600px) {
+            .card { padding: 36px 22px 40px; border-radius: 22px; }
+            .bio-card { padding: 30px 22px; border-radius: 22px; }
+            .name { font-size: 32px; letter-spacing: 7px; }
+            .card:hover .name { letter-spacing: 9px; }
+            .sign { font-size: 15px; letter-spacing: 1px; }
+            .info, .bio-card p { font-size: 14px; line-height: 2.2; }
+            .bio-card h2 { font-size: 18px; }
+            .avatar { width: 70px; height: 70px; font-size: 32px; margin-bottom: 16px; }
+            body::before, body::after { filter: blur(60px); opacity: 0.18; }
+            body::before { width: 200px; height: 200px; }
+            body::after { width: 180px; height: 180px; }
+            .security-alert-box { padding: 20px 25px; }
+            .security-alert-text { font-size: 18px; }
+            .bruteforce-alert-box { padding: 25px 30px; }
+            .bruteforce-alert-text { font-size: 22px; }
+            .ball { filter: blur(12px); opacity: 0.4; }
+            .lang-switch-btn {
+                width: 42px;
+                height: 42px;
+                bottom: 18px;
+                right: 18px;
+                font-size: 16px;
+            }
+            .splash-title { font-size: 42px; letter-spacing: 10px; }
+            .splash-sub { font-size: 16px; letter-spacing: 4px; }
+            .splash-divider { width: 50px; }
+        }
+
+        @media (max-width: 380px) {
+            .name { font-size: 26px; letter-spacing: 4px; }
+            .card:hover .name { letter-spacing: 6px; }
+            .sign { font-size: 14px; }
+            .info { font-size: 13px; }
+            .card { padding: 28px 16px 32px; }
+            .bio-card { padding: 24px 16px; }
+            .splash-title { font-size: 34px; letter-spacing: 6px; }
+            .splash-sub { font-size: 14px; letter-spacing: 3px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 开屏动画层 -->
+    <div class="splash-screen" id="splash">
+        <div class="splash-title">追风的人</div>
+        <div class="splash-sub">个人博客</div>
+        <div class="splash-divider"></div>
+    </div>
+
+    <main id="protected-area" class="protected-content">
+        <div class="card">
+            <div class="avatar" aria-hidden="true">
+                <span>🌬️</span>
+            </div>
+            <h1 class="name">
+                <span class="zh">追风的人</span>
+                <span class="en">The Wind Chaser</span>
+            </h1>
+            <p class="sign">
+                <span class="zh">心有山海，静而不争，慢慢来，一切皆有期。</span>
+                <span class="en">With mountains and seas in heart, serene and unhurried, everything comes in its time.</span>
+            </p>
+            <div class="divider" aria-hidden="true"></div>
+            <p class="info">
+                <span class="zh">热爱生活与创意设计，偏爱安静与温柔的事物。<br></span>
+                <span class="en">Passionate about life and creative design, fond of quiet and gentle things.<br></span>
+                <span class="zh">喜欢收集美好、制作<span class="highlight">海报</span>与<span class="highlight">视觉创作</span>，<br></span>
+                <span class="en">Enjoy collecting beauty, making <span class="highlight">posters</span> and <span class="highlight">visual creations</span>,<br></span>
+                <span class="zh">守一份纯粹，做自己的风景。</span>
+                <span class="en">Preserving purity, being my own scenery.</span>
+            </p>
+        </div>
+        <div class="bio-card">
+            <h2>
+                <span class="zh">📄 关于我</span>
+                <span class="en">📄 About Me</span>
+            </h2>
+            <p class="greeting">
+                <span class="zh">你好，很高兴与你相逢于此。</span>
+                <span class="en">Hello, nice to meet you here.</span>
+            </p>
+            <p>
+                <span class="zh">我是追风的人，一个偏爱安静、心怀温柔的普通人。</span>
+                <span class="en">I am the Wind Chaser, an ordinary person who loves quietness and carries tenderness.</span>
+            </p>
+            <p>
+                <span class="zh">不喜喧嚣热闹，独爱岁月清宁，习惯在平淡的日子里收集世间所有美好。热爱视觉创作、喜欢打磨版式与画面，钟情于用审美装点生活，把细碎的温柔藏进每一处细节里。</span>
+                <span class="en">Not keen on noise and bustle, I cherish tranquil days, collecting all the beauty in ordinary life. I love visual creation, refining layouts and images, decorating life with aesthetics, and hiding delicate tenderness in every detail.</span>
+            </p>
+            <p>
+                <span class="zh">心有山海，静而不争。不慌不忙，慢慢前行，相信世间所有奔赴，皆有归途，所有美好，终会如期而至。</span>
+                <span class="en">With mountains and seas in heart, serene and unhurried. Take it easy and move forward, believing every journey has its destination, and all beauty will come as promised.</span>
+            </p>
+            <p>
+                <span class="zh">愿往后日子，追风赶月不回头，平安喜乐度余生，也愿路过此间的你，岁岁安然，万事顺遂。</span>
+                <span class="en">May the days ahead be free of looking back, filled with peace and joy. And may you who pass by here be safe and sound, with everything going smoothly.</span>
+            </p>
+        </div>
+        <p class="contact-line">
+            <span class="zh">📧 联系我：</span>
+            <span class="en">📧 Contact me: </span>
+            <a href="mailto:wtywty1025@qq.com">wtywty1025@qq.com</a>
+        </p>
+        <p class="copyright">
+            <span class="zh">© 2026 追风的人 · 版权所有</span>
+            <span class="en">© 2026 The Wind Chaser · All Rights Reserved</span>
+        </p>
+    </main>
+
+    <!-- 语言切换按钮 -->
+    <button id="lang-toggle" class="lang-switch-btn" aria-label="Switch Language">中</button>
+
+    <!-- 防护脚本 (完全保留) -->
+    <script>
+        (function() {
+            'use strict';
+            const PROTECTED_ID = 'protected-area';
+            const protectedEl = document.getElementById(PROTECTED_ID);
+            if (!protectedEl) return;
+
+            function encodeHTML(html) {
+                const bytes = new TextEncoder().encode(html);
+                const binStr = String.fromCharCode(...bytes);
+                return btoa(binStr);
+            }
+
+            function decodeHTML(encoded) {
+                const binStr = atob(encoded);
+                const bytes = Uint8Array.from(binStr, c => c.charCodeAt(0));
+                return new TextDecoder().decode(bytes);
+            }
+
+            window.__INITIAL_HTML_ENCODED = encodeHTML(protectedEl.innerHTML);
+            Object.defineProperty(window, '__INITIAL_HTML_ENCODED', { writable: false, configurable: false });
+
+            function getInitialHTML() {
+                return decodeHTML(window.__INITIAL_HTML_ENCODED);
+            }
+            const INITIAL_HTML = getInitialHTML();
+
+            let tamperCount = 0;
+            let tamperTimer = null;
+            const BRUTEFORCE_THRESHOLD = 3;
+            const BRUTEFORCE_WINDOW = 10000;
+
+            function resetBruteforceCounter() {
+                tamperCount = 0;
+                if (tamperTimer) clearTimeout(tamperTimer);
+                tamperTimer = null;
+            }
+
+            function incrementTamperCount() {
+                if (!tamperTimer) {
+                    tamperTimer = setTimeout(resetBruteforceCounter, BRUTEFORCE_WINDOW);
+                }
+                tamperCount++;
+                if (tamperCount >= BRUTEFORCE_THRESHOLD) {
+                    showBruteforceAlert();
+                    resetBruteforceCounter();
+                }
+            }
+
+            function showBruteforceAlert() {
+                if (document.querySelector('.bruteforce-alert-overlay')) return;
+                const overlay = document.createElement('div');
+                overlay.className = 'bruteforce-alert-overlay';
+                overlay.innerHTML = `
+                    <div class="bruteforce-alert-box">
+                        <div class="bruteforce-alert-icon">⛔</div>
+                        <div class="bruteforce-alert-text">检测到暴力破解行为</div>
+                        <div class="bruteforce-alert-sub">页面已被锁定，您的操作已被记录。<br>请立即停止非法修改！</div>
+                    </div>
+                `;
+                document.body.appendChild(overlay);
+                overlay.addEventListener('click', function(e) {
+                    if (e.target === overlay) overlay.remove();
+                });
+                console.error('%c⛔ 暴力破解警告！有人正在频繁尝试修改页面内容！', 'color: red; font-size: 20px; font-weight: bold;');
+                console.error('%c操作已被记录，请立即停止。', 'color: #ff4444;');
+            }
+
+            function showRedAlert(message = '严禁修改！页面内容已自动保护并恢复。', duration = 2200) {
+                if (document.querySelector('.security-alert-overlay')) return;
+                const overlay = document.createElement('div');
+                overlay.className = 'security-alert-overlay';
+                overlay.innerHTML = `
+                    <div class="security-alert-box">
+                        <div class="security-alert-icon">🚫</div>
+                        <div class="security-alert-text">⚠️ 严禁修改</div>
+                        <div class="security-alert-sub">${message}</div>
+                    </div>
+                `;
+                document.body.appendChild(overlay);
+                setTimeout(() => {
+                    if (overlay && overlay.parentNode) overlay.remove();
+                }, duration);
+                overlay.addEventListener('click', function(e) {
+                    if (e.target === overlay) overlay.remove();
+                });
+            }
+
+            let observer = null;
+            let restoreTimer = null;
+
+            function restoreProtectedContent(silent = false) {
+                const el = document.getElementById(PROTECTED_ID);
+                if (!el) return;
+                if (observer) observer.disconnect();
+                el.innerHTML = INITIAL_HTML;
+                if (!silent) {
+                    incrementTamperCount();
+                    showRedAlert();
+                    console.warn('🔒 检测到内容被修改，已自动恢复。');
+                }
+                startObserving();
+            }
+
+            const observerConfig = { childList: true, subtree: true, characterData: true, attributes: false };
+            function startObserving() {
+                const el = document.getElementById(PROTECTED_ID);
+                if (!el) return;
+                if (observer) observer.disconnect();
+                observer = new MutationObserver((mutations) => {
+                    const hasContentChange = mutations.some(m => m.type === 'childList' || m.type === 'characterData');
+                    if (!hasContentChange) return;
+                    if (restoreTimer) clearTimeout(restoreTimer);
+                    restoreTimer = setTimeout(() => {
+                        restoreProtectedContent();
+                        restoreTimer = null;
+                    }, 50);
+                });
+                observer.observe(el, observerConfig);
+            }
+            startObserving();
+
+            setInterval(() => {
+                const el = document.getElementById(PROTECTED_ID);
+                if (!el) return;
+                if (!observer) {
+                    console.warn('🔒 Observer 被断开，正在重新连接...');
+                    restoreProtectedContent(true);
+                }
+                if (el.innerHTML !== INITIAL_HTML) {
+                    console.warn('🔒 定时自检发现内容篡改，正在修复...');
+                    restoreProtectedContent(false);
+                }
+            }, 2000);
+
+            const currentScript = document.currentScript || document.querySelector('script');
+            if (currentScript) {
+                const scriptParent = currentScript.parentNode;
+                const scriptClone = currentScript.cloneNode(true);
+                setInterval(() => {
+                    if (!document.contains(currentScript)) {
+                        console.warn('🔒 防护脚本被移除，正在恢复...');
+                        if (scriptParent) {
+                            scriptParent.appendChild(scriptClone);
+                        }
+                        startObserving();
+                    }
+                }, 3000);
+            }
+
+            const bodyObserver = new MutationObserver((mutations) => {
+                for (const mutation of mutations) {
+                    if (mutation.type === 'childList') {
+                        mutation.removedNodes.forEach(node => {
+                            if (node === protectedEl || (node.contains && node.contains(protectedEl))) {
+                                if (!document.body.contains(protectedEl)) {
+                                    document.body.insertBefore(protectedEl, document.body.firstChild);
+                                    restoreProtectedContent(true);
+                                    console.warn('🔒 受保护容器被删除，已恢复。');
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+            bodyObserver.observe(document.body, { childList: true, subtree: false });
+
+            document.addEventListener('contextmenu', e => e.preventDefault(), { passive: false });
+            document.addEventListener('dragstart', e => e.preventDefault(), { passive: false });
+            document.addEventListener('selectstart', e => e.preventDefault(), { passive: false });
+            document.addEventListener('keydown', function(e) {
+                const forbidden = [
+                    { code: 123 },
+                    { ctrl: true, shift: true, code: 73 },
+                    { ctrl: true, shift: true, code: 74 },
+                    { ctrl: true, code: 85 },
+                    { ctrl: true, code: 83 }
+                ];
+                for (const combo of forbidden) {
+                    if (
+                        (combo.code === e.keyCode || combo.code === e.key) &&
+                        (combo.ctrl === undefined || combo.ctrl === e.ctrlKey) &&
+                        (combo.shift === undefined || combo.shift === e.shiftKey)
+                    ) {
+                        e.preventDefault();
+                        return false;
+                    }
+                }
+            }, { passive: false });
+
+            let devtools = false;
+            const checkDevTools = function() {
+                const start = performance.now();
+                debugger;
+                const end = performance.now();
+                if (end - start > 160) {
+                    devtools = true;
+                    interfereConsole();
+                }
+            };
+            function interfereConsole() {
+                setInterval(() => {
+                    if (devtools) debugger;
+                }, 50);
+                console.clear();
+                console.log('%c🛡️ 安全防护已激活，控制台被干扰。', 'color: red; font-size: 16px;');
+            }
+            setInterval(checkDevTools, 1000);
+
+            if (window.top !== window.self) {
+                window.top.location = window.self.location;
+            }
+
+            window.addEventListener('beforeunload', function(e) {
+                const message = '您确定要离开吗？页面内容受保护，离开可能不会保存更改。';
+                e.preventDefault();
+                e.returnValue = message;
+                return message;
+            });
+
+            console.log('%c🛡️  追风的人 · 高级安全防护已激活', 'color: #C850C0; font-size: 16px; font-weight: bold;');
+            console.log('%c💡 页面内容受多重保护：篡改检测、暴力破解警告、脚本防删除、控制台干扰。', 'color: #6dd5ed;');
+
+            Object.defineProperty(window, '__restoreContent', {
+                value: restoreProtectedContent,
+                writable: false,
+                configurable: false
+            });
+        })();
+    </script>
+
+    <!-- 飘浮小球 -->
+    <script>
+        (function() {
+            if (document.querySelector('.floating-balls')) return;
+            const container = document.createElement('div');
+            container.className = 'floating-balls';
+            document.body.appendChild(container);
+
+            const colors = [
+                'radial-gradient(circle at 30% 30%, rgba(255,200,200,0.65), rgba(255,120,150,0.3))',
+                'radial-gradient(circle at 70% 20%, rgba(180,220,255,0.7), rgba(80,160,250,0.3))',
+                'radial-gradient(circle at 40% 60%, rgba(210,180,255,0.6), rgba(140,100,220,0.35))',
+                'radial-gradient(circle at 60% 40%, rgba(170,255,200,0.6), rgba(60,200,120,0.3))',
+                'radial-gradient(circle at 30% 50%, rgba(255,220,130,0.6), rgba(240,170,70,0.35))',
+                'radial-gradient(circle at 80% 20%, rgba(255,180,220,0.65), rgba(230,100,160,0.3))',
+                'radial-gradient(circle at 50% 70%, rgba(200,230,255,0.7), rgba(100,180,250,0.25))',
+                'radial-gradient(circle at 25% 75%, rgba(255,160,120,0.6), rgba(255,80,80,0.3))',
+                'radial-gradient(circle at 65% 35%, rgba(150,255,180,0.65), rgba(50,200,100,0.3))',
+                'radial-gradient(circle at 45% 55%, rgba(220,150,255,0.6), rgba(160,60,220,0.35))',
+                'radial-gradient(circle at 85% 15%, rgba(255,210,90,0.7), rgba(255,140,20,0.3))',
+                'radial-gradient(circle at 10% 90%, rgba(100,200,255,0.65), rgba(30,130,210,0.3))',
+                'radial-gradient(circle at 55% 25%, rgba(255,140,200,0.6), rgba(200,70,150,0.35))',
+                'radial-gradient(circle at 75% 65%, rgba(180,255,220,0.65), rgba(80,180,130,0.3))',
+                'radial-gradient(circle at 20% 40%, rgba(255,180,160,0.6), rgba(220,100,80,0.3))',
+                'radial-gradient(circle at 90% 80%, rgba(130,200,255,0.7), rgba(40,120,200,0.25))'
+            ];
+
+            const animations = ['floatAnim', 'floatAnim2'];
+            let ballCount = 16;
+            if (window.innerWidth < 600) ballCount = 10;
+            else if (window.innerWidth < 1200) ballCount = 14;
+            
+            for (let i = 0; i < ballCount; i++) {
+                const ball = document.createElement('div');
+                ball.className = 'ball';
+                let size = window.innerWidth < 600 ? 35 + Math.random() * 70 : 50 + Math.random() * 90;
+                ball.style.width = size + 'px';
+                ball.style.height = size + 'px';
+                ball.style.left = Math.random() * 100 + '%';
+                ball.style.top = Math.random() * 100 + '%';
+                ball.style.background = colors[Math.floor(Math.random() * colors.length)];
+                ball.style.opacity = 0.3 + Math.random() * 0.35;
+                const animType = animations[Math.floor(Math.random() * animations.length)];
+                const duration = 12 + Math.random() * 14;
+                ball.style.animation = `${animType} ${duration}s infinite alternate ease-in-out`;
+                ball.style.animationDelay = Math.random() * -10 + 's';
+                ball.style.filter = `blur(${12 + Math.random() * 8}px)`;
+                container.appendChild(ball);
+            }
+        })();
+    </script>
+
+    <!-- 语言切换逻辑 -->
+    <script>
+        (function() {
+            const html = document.documentElement;
+            const btn = document.getElementById('lang-toggle');
+            if (!btn) return;
+
+            const savedLang = localStorage.getItem('blog-lang') || 'zh';
+            html.setAttribute('lang', savedLang);
+            updateButtonText(savedLang);
+
+            btn.addEventListener('click', function() {
+                const current = html.getAttribute('lang');
+                const next = current === 'en' ? 'zh' : 'en';
+                html.setAttribute('lang', next);
+                localStorage.setItem('blog-lang', next);
+                updateButtonText(next);
+            });
+
+            function updateButtonText(lang) {
+                btn.textContent = lang === 'en' ? 'EN' : '中';
+            }
+        })();
+    </script>
+
+    <!-- 开屏动画淡出逻辑（5秒后消失） -->
+    <script>
+        (function() {
+            const splash = document.getElementById('splash');
+            if (!splash) return;
+
+            setTimeout(() => {
+                splash.classList.add('fade-out');
+                splash.addEventListener('transitionend', function() {
+                    splash.remove();
+                });
+            }, 5000);
+        })();
+    </script>
+</body>
+</html>
